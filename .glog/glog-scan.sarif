@@ -1,0 +1,81 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Glog.AI",
+          "organization": "Glog.AI",
+          "fullName": "Glog, Making software more secure",
+          "version": "1.0.0",
+          "semanticVersion": "1.0.0",
+          "informationUri": "https://www.glog.ai",
+          "rules": [
+            {
+              "id": "glog-901555ac-d909-4d29-88ff-84caeeca6a74",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `xml.etree.ElementTree.fromstring` function in Python's standard library is used to parse XML data from a string. However, it is vulnerable to XML External Entity (XXE) attacks if it parses untrusted XML data. An XXE attack can lead to the disclosure of confidential data, denial of service, server side request forgery, port scanning from the perspective of the machine where the parser is located, and other system impacts.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should avoid parsing untrusted XML data with `xml.etree.ElementTree.fromstring`. If you must parse untrusted XML data, use a safe, alternative XML parsing library that is not vulnerable to XXE attacks, such as `defusedxml`.\n\n## Source Code Fix Recommendation\n\nReplace the vulnerable `xml.etree.ElementTree.fromstring` function with the safe `defusedxml.ElementTree.fromstring` function. Here is the fixed code:\n\n```python\nfrom defusedxml import ElementTree as ET\n\ndef parse_xml(output):\n    return ET.fromstring(output) if output else None\n```\n\n## Library Dependencies\n\nThe fixed code requires the `defusedxml` library. You can install it with pip:\n\n```\npip install defusedxml\n```\n\n## References\n\n- [CWE-611: Improper Restriction of XML External Entity Reference ('XXE')](https://cwe.mitre.org/data/definitions/611.html)"
+              },
+              "properties": {
+                "tags": [
+                  "B314"
+                ]
+              }
+            }
+          ],
+          "language": "en-US",
+          "contents": [
+            "localizedData",
+            "nonLocalizedData"
+          ],
+          "isComprehensive": false
+        }
+      },
+      "language": "en-US",
+      "results": [
+        {
+          "ruleId": "glog-901555ac-d909-4d29-88ff-84caeeca6a74",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"Vulnerability in Parsing Untrusted XML Data with xml.etree.ElementTree.fromstring\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "ci/ray_ci/bazel_sharding.py"
+                },
+                "region": {
+                  "startLine": 190,
+                  "startColumn": 12,
+                  "endLine": 190,
+                  "endColumn": 33,
+                  "snippet": {
+                    "text": "    return ET.fromstring(output) if output else None\n"
+                  }
+                },
+                "contextRegion": {
+                  "startLine": 189,
+                  "endLine": 191,
+                  "snippet": {
+                    "text": "    output = p.stdout.strip()\n    return ET.fromstring(output) if output else None\n\n"
+                  }
+                }
+              }
+            }
+          ],
+          "properties": {
+            "issue_severity": "MEDIUM",
+            "issue_confidence": "HIGH"
+          }
+        }
+      ],
+      "newlineSequences": [
+        "\r\n",
+        "\n"
+      ]
+    }
+  ]
+}
